@@ -7,16 +7,16 @@ namespace :maintenance do
       reason = ENV['REASON']
       deadline = ENV['UNTIL']
 
-      template = File.read(maintenance_template_path)
+      template = File.read(fetch(:maintenance_template_path))
       result = ERB.new(template).result(binding)
 
-      put result, "#{shared_path}/system/#{maintenance_basename}.html", :mode => 0644
+      put result, "#{shared_path}/system/#{fetch(:maintenance_basename,"maintenance")}.html", :mode => 0644
     end
   end
 
   task :disable do
     on roles(:web) do
-      run "rm -f #{shared_path}/system/#{maintenance_basename}.html"
+      run "rm -f #{shared_path}/system/#{fetch(:maintenance_basename,"maintenance")}.html"
     end
   end
 end
